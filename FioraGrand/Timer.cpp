@@ -16,3 +16,19 @@ void Timer::get_time()
 void Timer::update_time() {
     current_time = SDL_GetTicks();
 }
+void Timer::update_pause_start_time() {
+    pause_start_time = SDL_GetTicks();
+}
+void Timer::update_pause_end_time() {
+    pause_end_time = SDL_GetTicks();
+    pause_time += pause_end_time - pause_start_time;
+}
+void Timer::game_time(int& game_state, bool is_pause) {
+    if (game_state == GAME_MENU) {
+        game_start_time = SDL_GetTicks();
+        current_time = 0;
+    }
+    else if (game_state == GAME_PLAY) {
+        current_time = SDL_GetTicks() - game_start_time - pause_time;
+    }
+}

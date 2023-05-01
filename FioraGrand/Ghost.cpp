@@ -5,7 +5,7 @@ Ghost::Ghost()
     // set up for random spawn place and size of ghost
     m_rect = new SDL_Rect;
     m_rect->x = rand() % SCREEN_WIDTH;
-    m_rect->y = rand() % SCREEN_HEIGHT;
+    m_rect->y = rand() % SOLID_FLOOR;
 
     m_rect->w = GHOST_WIDTH;
     m_rect->h = GHOST_HEIGHT;

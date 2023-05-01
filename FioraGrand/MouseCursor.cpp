@@ -19,8 +19,9 @@ void MouseCursor::Update(SDL_Event& event)
     SDL_GetMouseState(&x, &y);
 
     // update position for rect
-    Mouse_Rect.x = x;
-    Mouse_Rect.y = y;
+    Mouse_Rect.x = x - Mouse_Rect.w / 2;
+    Mouse_Rect.y = y - Mouse_Rect.h / 2;
+    
     is_call = false;
 
     // mouse click event

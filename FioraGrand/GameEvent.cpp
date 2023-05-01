@@ -7,9 +7,9 @@ void GameEvent::AddEnemy()
     tmp_rect->h = 32;
     int last_y_pos = 30;
 
-    for (int i = 1; i <= 10; i++)
+    for (int i = 1; i <= 12; i++)
     {
-        tmp_rect->x = rand() % 1260;
+        tmp_rect->x = rand() % SCREEN_WIDTH;
         tmp_rect->y = last_y_pos;
         last_y_pos += 50;
 
@@ -20,25 +20,11 @@ void GameEvent::AddEnemy()
 }
 
 
-bool GameEvent::CheckCollision(const SDL_Rect& rect1, const SDL_Rect& rect2)
+void GameEvent::Check_Player_And_Ghostball(Character& player, Enemy& ghostball, SDL_Renderer* renderer,
+    Timer& time_manage)
 {
-    int left1 = rect1.x;
-    int right1 = rect1.x + rect1.w;
-    int top1 = rect1.y;
-    int bot1 = rect1.y + rect1.h;
-
-    int left2 = rect2.x;
-    int right2 = rect2.x + rect2.w;
-    int top2 = rect2.y;
-    int bot2 = rect2.y + rect2.h;
-
-    if (left1 > right2 || left2 > right1 || top1 > bot2 || top2 > bot1) return false;
-    return true;
-}
-
-void GameEvent::Check_Player_And_Ghostball(Character& player, Enemy& ghostball, SDL_Renderer* renderer)
-{
-    if (SDL_GetTicks() - shield_time >= 5000) player.shield_state = false;
+    if (SDL_GetTicks() - time_manage.game_start_time - time_manage.pause_time - shield_time >= 5000)
+        player.shield_state = false;
     if (CheckCollision(*player.Get_Hitbox(), *ghostball.Get_Rect()) && !player.shield_state)
     {
         ghostball.is_bang = true;
@@ -84,7 +70,6 @@ void GameEvent::CallSword(MouseCursor& mouse, CyberSword& cybersword)
 
 bool GameEvent::Check_PLayer_And_Ghost(Character& player, Ghost& ghost)
 {
-    if (SDL_GetTicks() - shield_time >= 5000) player.shield_state = false;
     if (CheckCollision(*player.Get_Hitbox(), *ghost.Get_Rect()) && !player.shield_state)
     {
         player.current_heart_frame++;

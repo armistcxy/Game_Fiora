@@ -10,7 +10,7 @@ public:
 	TTF_Font* MediumSize; 
 	TTF_Font* SmallSize;
 
-	bool Get_Font_Type_and_Size(TTF_Font* font, const char* font_name, int size);
+	bool Get_Font_Type_and_Size(TTF_Font*& font, const char* font_name, int size);
 	bool Load_Font();
 	bool Render_Text(SDL_Renderer* renderer, const char* text, TTF_Font* font, SDL_Color text_color, SDL_Rect* rect);
 

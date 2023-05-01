@@ -190,6 +190,34 @@ void Character::shield_call(SDL_Renderer* renderer){
         current_shield_frame = tot_frame / CHARACTER_DELAY;
     }
 }
+// suggest: atan2 built_in function
 
 
 
+// testing function
+/*
+* void Character::BodyToOtherSide(){
+*   const int FLY_TIME = 1500;
+*   if (SDL_GetCurrentTicks() - last_explode_time >= FLY_TIME) is_explode = false;
+* 
+*   if (is_explode){
+*      // body fly time
+*      if (from_the_right_side){
+*          vec_x += 0.5;
+*          vec_y -= 0.5;
+*      }
+*      else if (from_the_left_side){
+*           vec_x -= 0.5;
+*           vec_y -= 0.5;
+*      }
+*      else if (from_the_upper_side){
+*           vec_y += 0.5
+*       }
+*       // the question is how about the update_pos function, can we use goto syntax?
+*       // 
+*   }
+*   
+*   
+*
+* }
+*/

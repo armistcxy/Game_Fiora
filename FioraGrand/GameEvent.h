@@ -10,7 +10,8 @@
 #include "Ghost.h"
 #include "CyberSword.h"
 #include "MouseCursor.h"
-
+#include "Collision.h"
+#include "Timer.h"
 class GameEvent
 {
 public:
@@ -19,9 +20,8 @@ public:
     void AddEnemy();
     void AddGhost();
 
-    bool CheckCollision(const SDL_Rect& a, const SDL_Rect& b);
-
-    void Check_Player_And_Ghostball(Character& player, Enemy& ghostball, SDL_Renderer* renderer);
+    void Check_Player_And_Ghostball(Character& player, Enemy& ghostball, SDL_Renderer* renderer,
+                                    Timer& time_manage);
 
     bool Check_PLayer_And_Ghost(Character& player, Ghost& ghost);
 
