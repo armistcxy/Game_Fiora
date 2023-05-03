@@ -44,6 +44,7 @@ Character::Character()
     current_heart_frame = 0;
 
     current_shield_frame = 0;
+
 }
 
 SDL_Rect* Character::Get_Rect()
@@ -109,6 +110,7 @@ void Character::Character_Handle(SDL_Event& event)
     {
         player_vel.y = player_acc.y;
         is_jumpping = true;
+        
         max_frame = JUMP_FRAMES;
     }
     // update frame
@@ -190,34 +192,14 @@ void Character::shield_call(SDL_Renderer* renderer){
         current_shield_frame = tot_frame / CHARACTER_DELAY;
     }
 }
-// suggest: atan2 built_in function
+
+void Character::reset() {
+    current_heart_frame = 0;
+    shield_state = false;
+    player_pos.x = DEFAULT_PLAYER_POS;
+    player_pos.y = DEFAULT_PLAYER_POS;
+}
 
 
 
-// testing function
-/*
-* void Character::BodyToOtherSide(){
-*   const int FLY_TIME = 1500;
-*   if (SDL_GetCurrentTicks() - last_explode_time >= FLY_TIME) is_explode = false;
-* 
-*   if (is_explode){
-*      // body fly time
-*      if (from_the_right_side){
-*          vec_x += 0.5;
-*          vec_y -= 0.5;
-*      }
-*      else if (from_the_left_side){
-*           vec_x -= 0.5;
-*           vec_y -= 0.5;
-*      }
-*      else if (from_the_upper_side){
-*           vec_y += 0.5
-*       }
-*       // the question is how about the update_pos function, can we use goto syntax?
-*       // 
-*   }
-*   
-*   
-*
-* }
-*/
+

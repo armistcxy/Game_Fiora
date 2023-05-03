@@ -8,19 +8,8 @@
 #include "GameProp.h"
 #include <map>
 #include <vector>
+#include "SDL_mixer.h"
 
-enum X_POS_STATE
-{
-    X_LEFT,
-    X_RIGHT,
-    X_STAND
-};
-enum Y_POS_STATE
-{
-    Y_LEFT,
-    Y_RIGHT,
-    Y_STAND
-};
 
 enum CHARACTER_STATE
 {
@@ -30,12 +19,7 @@ enum CHARACTER_STATE
     JUMPING
 };
 
-enum ATTACK_STATE
-{
-    ATTACK1,
-    ATTACK2,
-    NOT_ATTACK
-};
+
 class Character
 {
 public:
@@ -77,6 +61,9 @@ public:
         {275,410,125,30}, {480,330,75,30}, {455,510,100,30}, {680,180,150,30}, {605,255,75,30},
         {605,410,175,30}, {605,590,50,50}, {655,590,50,10}, {805,512,75,30}, {855,332,155,30},
         {1032,255,100,30}, {905,127, 130,30}, {1110, 75, 125, 30}};
+
+    // reset
+    void reset();
 private:
     // rectangle texture
     SDL_Rect* m_rect;

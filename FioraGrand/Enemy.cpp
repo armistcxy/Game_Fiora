@@ -32,7 +32,7 @@ SDL_Rect* Enemy::Get_Rect()
 {
     return m_rect;
 }
-void Enemy::update_pos()
+void Enemy::update_pos(Timer& time_manager)
 {
     if (flip_flag == SDL_FLIP_NONE)
     {
@@ -50,7 +50,8 @@ void Enemy::update_pos()
             m_rect->x = SCREEN_WIDTH;
         }
     }
-    current_frame = (SDL_GetTicks() / DELAY_CONSTANT) % GHOSTBALL_FRAMES;
+    Uint32 current_time = time_manager.get_current_time();
+    current_frame = (current_time / DELAY_CONSTANT) % GHOSTBALL_FRAMES;
     
     if (is_bang) current_explosion_frame++;
     
@@ -61,10 +62,14 @@ void Enemy::update_pos()
         current_explosion_frame = 0;
         is_bang = false;
     }
-    enemy_speed = SDL_GetTicks() / INCREASE_SPEED_TIME + 1;
+    enemy_speed = current_time / INCREASE_SPEED_TIME + 1;
 }
 
 void Enemy::call_explosion(SDL_Renderer* renderer) {
     explosion_texture.RenderByFrame(renderer, "explosion", explosion_rect->x, explosion_rect->y,
         EXPLOSION_SIZE, EXPLOSION_SIZE, current_explosion_frame / EXPLOSION_DELAY);
+}
+
+void Enemy::reset_x_pos() {
+    m_rect->x = (rand() % 2 ? rand() % 400 : SCREEN_WIDTH - rand() % 400);
 }

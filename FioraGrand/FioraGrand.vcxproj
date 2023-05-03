@@ -138,6 +138,7 @@
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="GameEvent.cpp" />
     <ClCompile Include="Ghost.cpp" />
+    <ClCompile Include="Highscore.cpp" />
     <ClCompile Include="LoadTexture.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="GameEvent.h" />
     <ClInclude Include="GameProp.h" />
     <ClInclude Include="Ghost.h" />
+    <ClInclude Include="Highscore.h" />
     <ClInclude Include="LoadTexture.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MouseCursor.h" />

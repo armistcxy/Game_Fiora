@@ -9,7 +9,7 @@ const int TARGET_DELTA_TIME = 1;
 class Timer
 {
     public:
-        Timer(){};
+        
         bool is_switch;
         void get_time();
 
@@ -24,18 +24,20 @@ class Timer
             return current_time;
         };
 
+        void reset_time();
+
         void update_pause_start_time();
         void update_pause_end_time();
-        int64_t game_start_time;
-        int64_t pause_time;
+        Uint32 game_start_time;
+        Uint32 pause_time;
     private:
        float m_delta_time, m_prev_time;
        
        float current_time = 0.;
 
         
-       int64_t pause_start_time;
-       int64_t pause_end_time;
+       Uint32 pause_start_time;
+       Uint32 pause_end_time;
 };
 
 #endif // TIMER_H

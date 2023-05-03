@@ -9,7 +9,7 @@ void GameEvent::AddEnemy()
 
     for (int i = 1; i <= 12; i++)
     {
-        tmp_rect->x = rand() % SCREEN_WIDTH;
+        tmp_rect->x = (rand() % 2 ? rand() % 400 : SCREEN_WIDTH - rand() % 400);
         tmp_rect->y = last_y_pos;
         last_y_pos += 50;
 
@@ -21,27 +21,28 @@ void GameEvent::AddEnemy()
 
 
 void GameEvent::Check_Player_And_Ghostball(Character& player, Enemy& ghostball, SDL_Renderer* renderer,
-    Timer& time_manage)
+    Timer& time_manager, bool& is_mute)
 {
-    if (SDL_GetTicks() - time_manage.game_start_time - time_manage.pause_time - shield_time >= 5000)
+    Uint32 current_time = time_manager.get_current_time();
+    if (current_time - shield_time >= SHIELD_TIME)
         player.shield_state = false;
     if (CheckCollision(*player.Get_Hitbox(), *ghostball.Get_Rect()) && !player.shield_state)
     {
         ghostball.is_bang = true;
-        
+        if (!is_mute) Mix_PlayChannel(-1, explosion_sound, 0);
         ghostball.explosion_rect->x = ghostball.Get_Rect()->x;
         ghostball.explosion_rect->y = ghostball.Get_Rect()->y;
 
         ghostball.Get_Rect()->x = 0;
 
         player.current_heart_frame ++;
-        if (player.current_heart_frame == 4)
+        if (player.current_heart_frame == HEART_FRAME)
         {
              player.id = "death";
-             player.current_heart_frame = 4;
+             player.current_heart_frame = HEART_FRAME;
         }
         player.shield_state = true;
-        shield_time = SDL_GetTicks();
+        shield_time = current_time;
     }
 }
 
@@ -53,39 +54,41 @@ void GameEvent::AddGhost()
     }
 }
 
-void GameEvent::CallSword(MouseCursor& mouse, CyberSword& cybersword)
+void GameEvent::CallSword(MouseCursor& mouse, CyberSword& cybersword, Timer& time_manager)
 {
-    if (SDL_GetTicks() - cooldown_time > 5000) ulti_state = "ultimate";
+    Uint32 current_time = time_manager.get_current_time();
+    if (current_time - cooldown_time > SWORD_COOLDOWN_TIME) ulti_state = "ultimate";
 
     if (mouse.is_call && ulti_state == "ultimate")
     {
         cybersword.get_rect()->x = mouse.Mouse_Rect.x + mouse.Mouse_Rect.w/5 - 4;
         cybersword.get_rect()->y = WAITFORCALL;
-        cooldown_time = SDL_GetTicks();
+        cooldown_time = current_time;
         ulti_state = "ultimate_gray";
 
         mouse.is_call = false;
     }
 }
 
-bool GameEvent::Check_PLayer_And_Ghost(Character& player, Ghost& ghost)
+bool GameEvent::Check_PLayer_And_Ghost(Character& player, Ghost& ghost, Timer& time_manager)
 {
+    Uint32 current_time = time_manager.get_current_time();
     if (CheckCollision(*player.Get_Hitbox(), *ghost.Get_Rect()) && !player.shield_state)
     {
         player.current_heart_frame++;
-        if (player.current_heart_frame == 4)
+        if (player.current_heart_frame == HEART_FRAME)
         {
             player.id = "death";
-            player.current_heart_frame = 4;
+            player.current_heart_frame = HEART_FRAME;
         }
         player.shield_state = true;
-        shield_time = SDL_GetTicks();
+        shield_time = current_time;
     }
     return false;
 }
 
 
-void GameEvent::Kill_Ghost(CyberSword& cybersword)
+void GameEvent::Kill_Ghost(CyberSword& cybersword, bool& is_mute)
 {
     for (int i = 0; i < enemies.size(); i++)
     {
@@ -95,7 +98,7 @@ void GameEvent::Kill_Ghost(CyberSword& cybersword)
             enemies[i].explosion_rect->y = enemies[i].Get_Rect()->y;
 
             enemies[i].is_bang = true;
-
+            if (!is_mute) Mix_PlayChannel(-1, explosion_sound, 0);
             enemies[i].Get_Rect()->x = -50;
             enemies[i].Get_Rect()->y = rand() % SCREEN_HEIGHT;
         }
@@ -104,12 +107,23 @@ void GameEvent::Kill_Ghost(CyberSword& cybersword)
     {
         if (CheckCollision(*cybersword.get_rect(), *ghosts[i].Get_Rect()))
         {
-            ghosts[i].Get_Rect()->x = rand() % SCREEN_WIDTH;
-            ghosts[i].Get_Rect()->y = rand() % SCREEN_HEIGHT;
+            ghosts[i].ghost_state = GHOST_DEATH;
         }
     }
 }
 
+void GameEvent::Reset_Event(SDL_Renderer* renderer) {
+    ghosts.resize(0);
+    AddGhost();
+    for (auto& ghost : ghosts) {
+        ghost.m_ghost_frame.Load_Texture_From_Path("asset/Ghost.png", "ghost", renderer);
+        ghost.m_ghost_frame.Load_Texture_From_Path("asset/Ghost_Death.png", "ghost_death", renderer);
+    }
+    
+    for (auto& enemy : enemies) {
+        enemy.reset_x_pos();
+   }
+}
 
 
 

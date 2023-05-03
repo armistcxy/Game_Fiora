@@ -29,6 +29,8 @@ class Ghost
     private:
         SDL_Rect* m_rect;
         int x_vel, y_vel;
+        int total_frames = 0;
+        int max_frames = GHOST_FLY_FRAME;
 };
 
 #endif // GHOST_H
