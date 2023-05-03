@@ -43,11 +43,11 @@ static SDL_Rect time_rect = { SCREEN_WIDTH / 2 - TIME_SHOW_SIZE, 0, TIME_SHOW_SI
 static SDL_Rect game_title_rect = { SCREEN_WIDTH / 2 - GAME_TITLE_WIDTH / 2, 68, GAME_TITLE_WIDTH, GAME_TITLE_HEIGHT };
 static SDL_Rect game_end_rect = { SCREEN_WIDTH / 2 - GAME_END_WIDTH / 2, 130, GAME_END_WIDTH, GAME_END_HEIGHT };
 static Button play_button, exit_button, setting_button, highscore_button, pause_button, retry_button
-			,music_button;
+			,music_button, higher_button, lower_button;
 static int game_state = GAME_MENU;
 static Menu menu;
 static LoadTexture game_title_span;
-static LoadTexture game_end_background;
+static LoadTexture game_background;
 static Pause_screen pause_manager;
 static Highscore highscore_manager;
 static Font game_end_noti;

@@ -315,8 +315,13 @@ bool GameManager::LoadMedia() {
         }
     }
     
-    if (!game_end_background.Load_Texture_From_Path("asset/Game_end_background.png", "game_end_background", g_renderer)) {
+    if (!game_background.Load_Texture_From_Path("asset/Game_end_background.png", "game_end_background", g_renderer)) {
         std::cout << "Can't load game_end_background\n";
+        return false;
+    }
+
+    if (!game_background.Load_Texture_From_Path("asset/Setting_background.png", "setting_background", g_renderer)) {
+        std::cout << "Can't load setting_background\n";
         return false;
     }
 
@@ -423,6 +428,12 @@ void GameManager::Run() {
                     && events.button.button == SDL_BUTTON_LEFT) {
                     game_state = GAME_HIGHSCORE;
                 }
+
+                if (setting_button.Light_or_Dark() && events.type == SDL_MOUSEBUTTONUP
+                    && events.button.button == SDL_BUTTON_LEFT) {
+                    game_state = GAME_SETTING;
+                }
+
                 if (events.type == SDL_QUIT) {
                     is_running = false;
                     break;
@@ -622,7 +633,7 @@ void GameManager::Run() {
             }
             break;
         case GAME_END:
-            game_end_background.Render(g_renderer, "game_end_background", START_POINT, SCREEN_WIDTH, SCREEN_HEIGHT);
+            game_background.Render(g_renderer, "game_end_background", START_POINT, SCREEN_WIDTH, SCREEN_HEIGHT);
             retry_button.Light_or_Dark() ? retry_button.Render_button(g_renderer, "retry_light") :
                 retry_button.Render_button(g_renderer, "retry_dark");
             pause_manager.home_button.Light_or_Dark() ? pause_manager.home_button.Render_button(g_renderer, "home_light") :
@@ -667,7 +678,52 @@ void GameManager::Run() {
                 mouse.Update(events);
             }
             break;
+        case GAME_SETTING:
+            game_background.Render(g_renderer, "setting_background", START_POINT, SCREEN_WIDTH, SCREEN_HEIGHT);
+            pause_manager.home_button.Init_position(SCREEN_WIDTH - BUTTON_SIZE, 0);
+            (pause_manager.home_button.Light_or_Dark() ?
+                pause_manager.home_button.Render_button(g_renderer, "home_light") :
+                pause_manager.home_button.Render_button(g_renderer, "home_dark"));
+            if (!is_mute) {
+                music_button.Light_or_Dark() ? music_button.Render_button(g_renderer, "music_light") :
+                    music_button.Render_button(g_renderer, "music_dark");
+            }
+            else {
+                music_button.Light_or_Dark() ? music_button.Render_button(g_renderer, "mute_light") :
+                    music_button.Render_button(g_renderer, "mute_dark");
+            }
+            while (SDL_PollEvent(&events))
+            {
+                if (events.type == SDL_QUIT) {
+                    is_running = false;
+                    break;
+                }
+                if (pause_manager.home_button.Light_or_Dark() && events.type == SDL_MOUSEBUTTONUP
+                    && events.button.button == SDL_BUTTON_LEFT) {
+                    game_state = GAME_MENU;
+                    player.current_heart_frame = 0;
+                    player.reset();
+                    game_update.Reset_Event(g_renderer);
+                    break;
+                }      
+                if (music_button.Light_or_Dark() && events.type == SDL_MOUSEBUTTONUP
+                    && events.button.button == SDL_BUTTON_LEFT) {
+                    is_mute = !is_mute;
+                    if (Mix_PlayingMusic() == 0 && !is_mute)
+                    {
+                        Mix_PlayMusic(background_music, -1);
+                    }
+                    else
+                    {
+                        if (Mix_PausedMusic() == 1) Mix_ResumeMusic();
+                        else Mix_PauseMusic();
+                    }
+                }
+                mouse.Update(events);
+            }
+            break;
         }
+        
         // mouse cursor
         SDL_ShowCursor(NULL);
 

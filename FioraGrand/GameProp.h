@@ -93,5 +93,6 @@ enum {
 	GAME_END,
 	GAME_PAUSE, 
 	GAME_HIGHSCORE,
+	GAME_SETTING,
 };
 #endif // GAMEPROP_H
